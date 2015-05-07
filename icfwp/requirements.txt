@@ -1,0 +1,4 @@
+requests==2.2.1
+flask>=0.10.1
+praw>=2.1.21
+pytz>=2015.2

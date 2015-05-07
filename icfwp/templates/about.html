@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>It Came From Writing Prompts!</title>
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="{{url_for('root')}}">It Came From Writing Prompts!</a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a href="{{url_for('about')}}" class="navbar-link">About</a>
+            </li>
+        </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+    <div class="panel">
+        <h2>Has this ever happened to you?</h2>
+
+        <p>
+            You've been searching
+            <a href="//reddit.com/r/writingprompts/">/r/WritingPrompts</a>
+            for over an hour now, and there hasn't been a
+            single solitary mention of Hitler in this whole time.  Now, I know
+            what you're thinking, you can get by without Hitler for a while, but
+            the situation's worse than that.  There's no Batman.  No Harry
+            Potter.  No God (not in the atheist sense, merely in the sense that
+            no writing prompts have featured a divine being of any sort.
+            ICFWP<sup>tm</sup> LLC makes no statement for or against the
+            presence or absense, past or future, of zero or more god(s) or
+            godlike being(s)).
+            No devil (see above).  Not even the second-string celebrities like
+            Aquaman.
+        </p>
+
+        <h2>What to do?</h2>
+
+        <p>
+            Well, you could go to one of the more original writing prompts and-
+        </p>
+
+        <h2>Haha no seriously what do I do?</h2>
+
+        <p>
+            I'm glad you asked!  If you can't get your time-travelling Hitler
+            Batman fanfic fix from the source, you can come to us.  We bring
+            you the finest prompts distilled from the essense of the subreddit,
+            at a fraction of the cost!  Announcing:
+        </p>
+
+        <h1 class="text-center">
+            It Came From Writing Prompts!
+        </h1>
+
+        <p>
+            Using state-of-the-art specifically tailored Markov Models, It Came
+            From Writing Prompts (ICFWP) determines the most used terms in
+            Writing Prompt titles, and creates brand-new prompts based on
+            familiar terms so you'll never have to deal with an unfamiliar
+            prompt again!  You'll be able to enjoy such prompts as:
+        </p>
+
+        <ul>
+            {% for row in prompts %}
+            <li>
+                [WP] {{row}}
+            </li>
+            {% endfor %}
+            <li>
+                <b>And more!</b>
+            </li>
+        </ul>
+
+        <p>
+            <a href="{{url_for('root')}}">Act Now</a> to get your high-quality
+            derivative prompts for free!  Remember:  When you think
+            "God steals Stalin from the Devil to fight a mind-controlled robot
+            clone of Ghengis Kahn in the streets of Neo Tokyo", think
+            <b>It Came From Writing Prompts!</b>
+        </p>
+    </div>
+</div>
+
+</body>
+</html>

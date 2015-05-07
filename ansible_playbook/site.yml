@@ -1,0 +1,56 @@
+- hosts: apache
+  user: ubuntu
+  sudo: yes
+  tasks:
+    - name: Install apache2 and dependencies
+      apt: name={{ item }} state=latest
+      with_items:
+        - apache2
+        - libapache2-mod-wsgi
+        - python-pip
+
+    - name: Create a directory for ICFWP
+      file: path=/var/www/vhosts/icfwp state=directory owner=www-data group=www-data mode=0775
+
+    - name: Populate that directory
+      copy: src="../icfwp/" dest="/var/www/vhosts/icfwp/"  owner=www-data group=www-data mode=0664
+
+    - name: Install ICFWP prereqs
+      pip: requirements=/var/www/vhosts/icfwp/requirements.txt
+
+    - name: Disable the old default site
+      file:
+        path=/etc/apache2/sites-enabled/000-default.conf
+        state=absent
+      notify:
+        - restart apache2
+
+    - name: Copy ICFWP config
+      copy:
+        src="static/icfwp.conf"
+        dest="/etc/apache2/sites-available/icfwp.conf"
+        owner=root group=root mode=0644
+
+    - name: Enable mod-wsgi
+      apache2_module: state=present name=wsgi
+      notify:
+        - restart apache2
+
+    - name: Enable ICFWP site
+      file:
+        src=/etc/apache2/sites-available/icfwp.conf
+        dest=/etc/apache2/sites-enabled/100-icfwp.conf
+        state=link
+      notify:
+        - restart apache2
+
+    - name: Schedule the ICFWP re-populator
+      cron:
+        name="ICFWP" minute="0" hour="1"
+        job="python /var/www/vhosts/icfwp/populator.py"
+        cron_file="icfwp"
+        user=root
+
+  handlers:
+    - name: restart apache2
+      service: name=apache2 state=restarted
