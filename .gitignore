@@ -1,4 +1,5 @@
 venv
 markov.json
+markov-dev.json
 *.pyc
 .idea

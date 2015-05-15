@@ -14,6 +14,8 @@
 
     - name: Populate that directory
       copy: src="../icfwp/" dest="/var/www/vhosts/icfwp/"  owner=www-data group=www-data mode=0664
+      notify:
+        - restart apache2
 
     - name: Install ICFWP prereqs
       pip: requirements=/var/www/vhosts/icfwp/requirements.txt

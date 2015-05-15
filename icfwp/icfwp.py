@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template
+from flask import jsonify, Flask, render_template
 
 #import config
 from markov.model import TransitionTable
@@ -22,6 +22,19 @@ app.config.from_pyfile('config.py')
 if 'ICFWP_CONFIG' in os.environ:
     app.config.from_envvar('ICFWP_CONFIG')
 
+
+def clamp_number(number, max, default=1):
+    if number > max:
+        return max
+    if number < 1:
+        return default
+    return number
+
+
+def generate():
+    markov_filename = app.config['MARKOV_STORAGE']
+    tt = TransitionTable.from_filename(markov_filename)
+    return random_prompt(tt)
 
 def prettify_result(segments):
     result = []
@@ -71,13 +84,23 @@ def root():
     tt = TransitionTable.from_filename(markov_filename)
     return render_template("index.html", prompt=random_prompt(tt))
 
+@app.route("/api/generate", defaults={'number': 1})
+@app.route("/api/generate/<int:number>")
+def api_generate(number):
+    number = clamp_number(number, 10)
+    if number > 10:
+        number = 10
+
+    result = {
+        'generated': [generate() for unused in xrange(number)],
+    }
+    return jsonify(result)
+
+
 @app.route("/about", defaults={'number': 3})
 @app.route('/about/<int:number>')
 def about(number):
-    if number > 10:
-        number = 10
-    elif number < 1:
-        number = 3
+    number = clamp_number(number, 10, default=3)
 
     markov_filename = app.config['MARKOV_STORAGE']
     tt = TransitionTable.from_filename(markov_filename)
